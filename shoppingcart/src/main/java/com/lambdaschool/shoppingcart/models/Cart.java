@@ -17,8 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "carts")
 public class Cart
-        extends Auditable
-{
+        extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long cartid;
@@ -36,38 +35,31 @@ public class Cart
             allowSetters = true)
     private User user;
 
-    public Cart()
-    {
+    public Cart() {
 
     }
 
-    public long getCartid()
-    {
+    public long getCartid() {
         return cartid;
     }
 
-    public void setCartid(long cartid)
-    {
+    public void setCartid(long cartid) {
         this.cartid = cartid;
     }
 
-    public List<CartItem> getProducts()
-    {
+    public List<CartItem> getProducts() {
         return products;
     }
 
-    public void setProducts(List<CartItem> products)
-    {
+    public void setProducts(List<CartItem> products) {
         this.products = products;
     }
 
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(User user)
-    {
+    public void setUser(User user) {
         this.user = user;
     }
 }

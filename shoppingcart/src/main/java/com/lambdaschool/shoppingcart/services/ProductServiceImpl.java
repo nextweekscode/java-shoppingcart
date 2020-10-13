@@ -25,6 +25,9 @@ public class ProductServiceImpl
     @Autowired
     private CartRepository cartrepos;
 
+    @Autowired
+    private HelperFunctions helperFunctions;
+
     /**
      * Connects this service to the auditing service in order to find the current user
      */
@@ -111,12 +114,12 @@ public class ProductServiceImpl
         }
 
         productrepos.updateProductInformation(userAuditing.getCurrentAuditor()
-                                                      .get(),
-                                              id,
-                                              currentProduct.getName(),
-                                              currentProduct.getPrice(),
-                                              currentProduct.getDescription(),
-                                              currentProduct.getComments());
+                        .get(),
+                id,
+                currentProduct.getName(),
+                currentProduct.getPrice(),
+                currentProduct.getDescription(),
+                currentProduct.getComments());
         return findProductById(id);
     }
 }

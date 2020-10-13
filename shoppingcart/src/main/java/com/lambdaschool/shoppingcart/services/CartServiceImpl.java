@@ -17,8 +17,7 @@ import java.util.List;
 @Transactional
 @Service(value = "cartService")
 public class CartServiceImpl
-        implements CartService
-{
+        implements CartService {
     /**
      * Connects this service to the cart repository
      */
@@ -44,14 +43,12 @@ public class CartServiceImpl
     private UserAuditing userAuditing;
 
     @Override
-    public List<Cart> findAllByUserId(Long userid)
-    {
+    public List<Cart> findAllByUserId(Long userid) {
         return cartrepos.findAllByUser_Userid(userid);
     }
 
     @Override
-    public Cart findCartById(long id)
-    {
+    public Cart findCartById(long id) {
         return cartrepos.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Car id " + id + " not found!"));
     }
@@ -59,8 +56,7 @@ public class CartServiceImpl
     @Transactional
     @Override
     public Cart save(User user,
-                     Product product)
-    {
+                     Product product) {
         Cart newCart = new Cart();
 
         User dbuser = userrepos.findById(user.getUserid())
@@ -84,22 +80,19 @@ public class CartServiceImpl
     @Transactional
     @Override
     public Cart save(Cart cart,
-                     Product product)
-    {
+                     Product product) {
         Cart updateCart = cartrepos.findById(cart.getCartid())
                 .orElseThrow(() -> new ResourceNotFoundException("Cart Id " + cart.getCartid() + " not found"));
         Product updateProduct = productrepos.findById(product.getProductid())
                 .orElseThrow(() -> new ResourceNotFoundException("Product id " + product.getProductid() + " not found"));
 
         if (cartrepos.checkCartItems(updateCart.getCartid(), updateProduct.getProductid())
-                .getCount() > 0)
-        {
+                .getCount() > 0) {
             cartrepos.updateCartItemsQuantity(userAuditing.getCurrentAuditor()
-                                                      .get(), updateCart.getCartid(), updateProduct.getProductid(), 1);
-        } else
-        {
+                    .get(), updateCart.getCartid(), updateProduct.getProductid(), 1);
+        } else {
             cartrepos.addCartItems(userAuditing.getCurrentAuditor()
-                                           .get(), updateCart.getCartid(), updateProduct.getProductid());
+                    .get(), updateCart.getCartid(), updateProduct.getProductid());
         }
 
         return cartrepos.save(updateCart);
@@ -108,22 +101,19 @@ public class CartServiceImpl
     @Transactional
     @Override
     public void delete(Cart cart,
-                       Product product)
-    {
+                       Product product) {
         Cart updateCart = cartrepos.findById(cart.getCartid())
                 .orElseThrow(() -> new ResourceNotFoundException("Cart Id " + cart.getCartid() + " not found"));
         Product updateProduct = productrepos.findById(product.getProductid())
                 .orElseThrow(() -> new ResourceNotFoundException("Product id " + product.getProductid() + " not found"));
 
         if (cartrepos.checkCartItems(updateCart.getCartid(), updateProduct.getProductid())
-                .getCount() > 0)
-        {
+                .getCount() > 0) {
             cartrepos.updateCartItemsQuantity(userAuditing.getCurrentAuditor()
-                                                      .get(), updateCart.getCartid(), updateProduct.getProductid(), -1);
+                    .get(), updateCart.getCartid(), updateProduct.getProductid(), -1);
             cartrepos.removeCartItemsQuantityZero();
             cartrepos.removeCartWithNoProducts();
-        } else
-        {
+        } else {
             throw new ResourceNotFoundException("Cart id " + updateCart.getCartid() + " Product id " + updateProduct.getProductid() + " combo not found");
         }
     }
